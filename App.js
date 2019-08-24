@@ -12,12 +12,9 @@ export default class App extends React.Component {
       isLoading: true,
       images:[]
     };
-
-    this.loadWallpapers = this.loadWallpapers.bind(this);
-    this.renderItem = this.renderItem.bind(this);
   }
 
-  loadWallpapers() {
+  loadWallpapers = () => {
     axios.get('https://api.unsplash.com/photos/random?count=30&client_id=47616d50de6696a8d40273322652c344085fe9d03512a66900b014d8a4344c6e'
     )
     .then(function(response){
@@ -37,14 +34,28 @@ export default class App extends React.Component {
     this.loadWallpapers()
   }
 
-  renderItem(image){
+  renderItem = ({item}) => {
     return(
+      <View style={{flex:1}}>
+        <View style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: 'black',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}>
+          <ActivityIndicator size="large" color="gray" />
+
+        </View>
       <View style={{height, width}}>
         <Image 
           style={{flex:1, height:null, width:null}}
-          source={{ uri: image.urls.regular }} 
-          resizeMode="cover"
+          source={{ uri: item.urls.regular }}
         />
+      </View>
       </View>
     );
   }
@@ -66,7 +77,7 @@ export default class App extends React.Component {
           horizontal
           pagingEnabled
           data={this.state.images}
-          renderItem={(({item}) => this.renderItem(item))}
+          renderItem={this.renderItem}
           keyExtractor={item => item.id}
         />
       </View> 
